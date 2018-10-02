@@ -12,7 +12,7 @@ public class MovementComponent : MonoBehaviour {
 
     void Start () {
 
-        serialPort = new SerialPort("COM3", 9600);
+        serialPort = new SerialPort("COM3", 115200);
         serialPort.Open();
 
         serialInformation = new byte[24]; // 6 floats 4 bytes each
@@ -23,19 +23,25 @@ public class MovementComponent : MonoBehaviour {
 	void Update () {
 
         string line;
+
         line = serialPort.ReadLine();
+
+ 
         Debug.Log(line);
 
-        string[] coordinateStrings = line.Split('\t');
+        string[] coordinateStrings = line.Split(' ');
         float[] coordinates = new float[coordinateStrings.Length];
         for (int i = 0; i < coordinateStrings.Length; i++)
         {
             coordinates[i] = float.Parse(coordinateStrings[i], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
 
         }
-        x += coordinates[0];
-        y += coordinates[1];
-        z += coordinates[2];
+        if (coordinates[0] != 0 && coordinates[1] != 0 && coordinates[2] != 0)
+        {
+            x = coordinates[0];
+            y = coordinates[1];
+            z = coordinates[2];
+        }
         transform.rotation = Quaternion.Euler(new Vector3(x, y, z));
         
 

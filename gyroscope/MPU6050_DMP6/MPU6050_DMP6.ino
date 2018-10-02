@@ -1,83 +1,12 @@
-// I2C device class (I2Cdev) demonstration Arduino sketch for MPU6050 class 
-// using DMP (MotionApps v2.0)
-// 6/21/2012 by Jeff Rowberg <jeff@rowberg.net>
- 
-/* ============================================
-I2Cdev device library code is placed under the MIT license
-Copyright (c) 2012 Jeff Rowberg
- 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
- 
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
- 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-===============================================
-*/
- 
-// I2Cdev and MPU6050 must be installed as libraries, or else the .cpp/.h files
-// for both classes must be in the include path of your project
+
 #include "I2Cdev.h"
- 
 #include "MPU6050_6Axis_MotionApps20.h"
- 
-// Arduino Wire library is required if I2Cdev I2CDEV_ARDUINO_WIRE implementation
-// is used in I2Cdev.h
-#if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
-    #include "Wire.h"
-#endif
- 
-// class default I2C address is 0x68
-// specific I2C addresses may be passed as a parameter here
-// AD0 low = 0x68 (default for SparkFun breakout and InvenSense evaluation board)
-// AD0 high = 0x69
+#include "Wire.h"
+
+
 MPU6050 mpu;
 //MPU6050 mpu(0x69); // <-- use for AD0 high
- 
-/* =========================================================================
-   NOTE: In addition to connection 3.3v, GND, SDA, and SCL, this sketch
-   depends on the MPU-6050's INT pin being connected to the Arduino's
-   external interrupt #0 pin. On the Arduino Uno and Mega 2560, this is
-   digital I/O pin 2.
- 
-   For the Galileo Gen1/2 Boards, there is no INT pin support. Therefore
-   the INT pin does not need to be connected, but you should work on getting
-   the timing of the program right, so that there is no buffer overflow.
- * ========================================================================= */
- 
-/* =========================================================================
-   NOTE: Arduino v1.0.1 with the Leonardo board generates a compile error
-   when using Serial.write(buf, len). The Teapot output uses this method.
-   The solution requires a modification to the Arduino USBAPI.h file, which
-   is fortunately simple, but annoying. This will be fixed in the next IDE
-   release. For more info, see these links:
- 
-   http://arduino.cc/forum/index.php/topic,109987.0.html
-   http://code.google.com/p/arduino/issues/detail?id=958
- * ========================================================================= */
- 
- 
-#define OUTPUT_READABLE_YAWPITCHROLL
- 
-// Unccomment if you are using an Arduino-Style Board
-// #define ARDUINO_BOARD
- 
-// Uncomment if you are using a Galileo Gen1 / 2 Board
-#define GALILEO_BOARD
- 
-#define LED_PIN 13      // (Galileo/Arduino is 13)
-bool blinkState = false;
+
  
 // MPU control/status vars
 bool dmpReady = false;  // set true if DMP init was successful
@@ -111,32 +40,20 @@ void dmpDataReady() {
 // ================================================================
  
 void setup() {
-    // join I2C bus (I2Cdev library doesn't do this automatically)
-    #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
-        Wire.begin();
-       // int TWBR = 24; // 400kHz I2C clock (200kHz if CPU is 8MHz)
-    #elif I2CDEV_IMPLEMENTATION == I2CDEV_BUILTIN_FASTWIRE
-        Fastwire::setup(400, true);
-    #endif
- 
-    Serial.begin(9600);
+
+    Wire.begin();
+    Serial.begin(115200);
 
     // initialize device
     mpu.initialize();
  
-    //Serial.println(F("MPU6050 connection "));
-   // Serial.print(mpu.testConnection() ? F("successful") : F("failed"));
-
- 
-    // load and configure the DMP
-
     devStatus = mpu.dmpInitialize();
  
     // supply your own gyro offsets here, scaled for min sensitivity
     mpu.setXGyroOffset(73);
     mpu.setYGyroOffset(64);
     mpu.setZGyroOffset(-11);
-    mpu.setZAccelOffset(1520); // 1688 factory default for my test chip
+    mpu.setZAccelOffset(1520); 
  
     // make sure it worked (returns 0 if so)
     if (devStatus == 0) {
@@ -165,8 +82,7 @@ void setup() {
         Serial.println(F(")"));
     }
  
-    // configure LED for output
-    pinMode(LED_PIN, OUTPUT);
+
 }
  
  
@@ -181,15 +97,9 @@ void loop() {
  
     // wait for MPU interrupt or extra packet(s) available
  
-    #ifdef ARDUINO_BOARD
-        while (!mpuInterrupt && fifoCount < packetSize) {
-        }
-    #endif
- 
-    #ifdef GALILEO_BOARD
-        delay(10);
-    #endif
- 
+    while (!mpuInterrupt && fifoCount < packetSize) {
+    }
+
     // reset interrupt flag and get INT_STATUS byte
     mpuInterrupt = false;
     mpuIntStatus = mpu.getIntStatus();
@@ -216,21 +126,17 @@ void loop() {
         fifoCount -= packetSize;
  
  
-        #ifdef OUTPUT_READABLE_YAWPITCHROLL
-            // display Euler angles in degrees
-            mpu.dmpGetQuaternion(&q, fifoBuffer);
-            mpu.dmpGetGravity(&gravity, &q);
-            mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
-           // Serial.print("ypr\t");
-            Serial.print(ypr[0] * 180/M_PI);
-            Serial.print(" ");
-            Serial.print(ypr[1] * 180/M_PI);
-            Serial.print(" ");
-            Serial.println(ypr[2] * 180/M_PI);
-        #endif
  
-        // blink LED to indicate activity
-        blinkState = !blinkState;
-        digitalWrite(LED_PIN, blinkState);
+        // display Euler angles in degrees
+        mpu.dmpGetQuaternion(&q, fifoBuffer);
+        mpu.dmpGetGravity(&gravity, &q);
+        mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
+        //Serial.print("test\t");
+        Serial.print(ypr[0] * 180/M_PI);
+        Serial.print(" ");
+        Serial.print(ypr[1] * 180/M_PI);
+        Serial.print(" ");
+        Serial.println(ypr[2] * 180/M_PI);
+
     }
 }
