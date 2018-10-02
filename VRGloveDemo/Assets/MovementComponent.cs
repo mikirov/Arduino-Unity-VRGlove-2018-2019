@@ -21,20 +21,26 @@ public class MovementComponent : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
         string line;
         line = serialPort.ReadLine();
         Debug.Log(line);
 
-        string[] coordinateStrings = line.Split(' ');
-        float[] coordinates = new float[6];
+        string[] coordinateStrings = line.Split('\t');
+        float[] coordinates = new float[coordinateStrings.Length];
         for (int i = 0; i < coordinateStrings.Length; i++)
         {
-            coordinates[i] = float.Parse(coordinateStrings[i]);
+            coordinates[i] = float.Parse(coordinateStrings[i], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
+
         }
-        x += coordinates[3] * Time.deltaTime;
-        y += coordinates[4] * Time.deltaTime;
-        z += coordinates[5] * Time.deltaTime;
+        x += coordinates[0];
+        y += coordinates[1];
+        z += coordinates[2];
         transform.rotation = Quaternion.Euler(new Vector3(x, y, z));
+        
+
+
+
         //Vector3 position = transform.position + new Vector3(coordinates[3], coordinates[4], coordinates[5]);
         //Quaternion rotation = new Quaternion()
         //transform.Rotate(coordinates[0], coordinates[1], coordinates[2]);
