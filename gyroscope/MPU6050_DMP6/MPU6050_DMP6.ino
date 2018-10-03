@@ -42,7 +42,7 @@ void dmpDataReady() {
 void setup() {
 
     Wire.begin();
-    Serial.begin(9600);
+    Serial.begin(38400);
 
     // initialize device
     mpu.initialize();
@@ -137,6 +137,6 @@ void loop() {
         Serial.print(ypr[1] * 180/M_PI);
         Serial.print(" ");
         Serial.println(ypr[2] * 180/M_PI);
-        // z, x, y
+
     }
 }
