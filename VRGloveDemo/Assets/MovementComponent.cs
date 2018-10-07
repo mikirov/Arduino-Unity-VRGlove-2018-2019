@@ -27,6 +27,7 @@ public class MovementComponent : MonoBehaviour {
         }
 
         serialPort = new SerialPort(port, 38400);
+        serialPort.ReadTimeout = 1000 / 60; // 60 times a frame
         if (!serialPort.IsOpen)
         {
             Debug.LogWarning("Opening port!");

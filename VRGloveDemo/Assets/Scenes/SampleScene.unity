@@ -523,6 +523,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d85f36c4a2c58a428116ee995d4055a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  port: COM3
 --- !u!1 &1777187362
 GameObject:
   m_ObjectHideFlags: 0
@@ -637,6 +638,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73f4f6b1eabd9304ba20846bcf5a1c81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fingers:
+  - {fileID: 128294427}
+  - {fileID: 60623072}
+  - {fileID: 1881389144}
+  - {fileID: 2140128051}
+  - {fileID: 1777187362}
+  ApplyShakynessFilter: 1
 --- !u!33 &1804798929
 MeshFilter:
   m_ObjectHideFlags: 0
