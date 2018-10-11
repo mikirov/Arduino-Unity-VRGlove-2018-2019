@@ -19,6 +19,9 @@ uint8_t fifoBuffer[64]; // FIFO storage buffer
 // orientation/motion vars
 VectorFloat gravity;    // [x, y, z]            gravity vector
 Quaternion q;           // [w, x, y, z]         quaternion container
+VectorInt16 aa;         // [x, y, z]            accel sensor measurements
+VectorInt16 aaReal;     // [x, y, z]            gravity-free accel sensor measurements
+VectorInt16 aaWorld;    // [x, y, z]            world-frame accel sensor measurements
 float euler[3];         // [psi, theta, phi]    Euler angle container
 float ypr[3];           // [yaw, pitch, roll]   yaw/pitch/roll container and gravity vector
  
@@ -136,7 +139,20 @@ void loop() {
         Serial.print(" ");
         Serial.print(ypr[1] * 180/M_PI);
         Serial.print(" ");
-        Serial.println(ypr[2] * 180/M_PI);
+        Serial.print(ypr[2] * 180/M_PI);
+        Serial.print(" ");
+
+        mpu.dmpGetQuaternion(&q, fifoBuffer);
+        mpu.dmpGetAccel(&aa, fifoBuffer);
+        mpu.dmpGetGravity(&gravity, &q);
+        mpu.dmpGetLinearAccel(&aaReal, &aa, &gravity);
+        mpu.dmpGetLinearAccelInWorld(&aaWorld, &aaReal, &q);
+        Serial.print(aaWorld.x);
+        Serial.print(" ");
+        Serial.print(aaWorld.y);
+        Serial.print(" ");
+        Serial.println(aaWorld.z);
+    
 
     }
 }
