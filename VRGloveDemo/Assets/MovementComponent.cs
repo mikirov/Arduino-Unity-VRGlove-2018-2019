@@ -12,7 +12,7 @@ public class MovementComponent : MonoBehaviour {
     string port = "COM3";
 
     [SerializeField]
-    int multiplier = 10;
+    float multiplier = 10;
 
     private GloveController gloveController;
 
@@ -64,23 +64,23 @@ public class MovementComponent : MonoBehaviour {
 
         transform.rotation = Quaternion.Euler(new Vector3(z_rot, x_rot, y_rot));
 
-        x_pos = coordinates[3] / sensitivity * multiplier;
-        y_pos = coordinates[4] / sensitivity * multiplier;
-        z_pos = coordinates[5] / sensitivity * multiplier;
+        x_pos += coordinates[3] / sensitivity * multiplier;
+        y_pos += coordinates[4] / sensitivity * multiplier;
+        z_pos += coordinates[5] / sensitivity * multiplier;
 
-        transform.position = new Vector3(x_pos, y_pos, z_pos);
+        transform.position = new Vector3(x_pos, z_pos, y_pos);
 
         float x = coordinates[0];
         float y = coordinates[1];
         float z = coordinates[2];
         
-        transform.rotation = Quaternion.Euler(new Vector3(z, x, y));
+        //transform.rotation = Quaternion.Euler(new Vector3(z, x, y));
 
         //Vector3 position = transform.position + new Vector3(coordinates[3], coordinates[4], coordinates[5]);
         //Quaternion rotation = new Quaternion()
         //transform.Rotate(coordinates[0], coordinates[1], coordinates[2]);
         // transform.Translate(coordinates[3], coordinates[4], coordinates[5]);
-        Vector3 wristAccData = new Vector3(x_pos, y_pos, z_pos);
+        Vector3 wristAccData = new Vector3(z_pos, x_pos, y_pos);
         Vector3 gyroData = new Vector3(z, x, y);
         Vector3[] fingersAccData = { Vector3.zero, Vector3.zero, Vector3.zero, Vector3.zero, Vector3.zero };
         gloveController.FeedMovementInfo(wristAccData, gyroData, fingersAccData);

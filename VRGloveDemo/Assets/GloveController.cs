@@ -13,13 +13,13 @@ public class GloveController : MonoBehaviour {
 
     public void FeedMovementInfo(Vector3 wristAccData, Vector3 wristGyroData, Vector3[] fingersAccData)
     {
-        transform.position += wristAccData;
+        transform.position = wristAccData;
         transform.eulerAngles = wristGyroData;
         
         for (int i = 0; i < fingers.Length; i++) {
             // Jumpscare za kirov.
-            string jumpscare = GetRandomCorruptedChars();
-            Debug.LogError("Could not read serial info: " + jumpscare  + "\nSerial device might be corrupted!");
+            //string jumpscare = GetRandomCorruptedChars();
+           // Debug.LogError("Could not read serial info: " + jumpscare  + "\nSerial device might be corrupted!");
 
 
             if (i >= fingersAccData.Length) {
@@ -27,7 +27,7 @@ public class GloveController : MonoBehaviour {
             }
 
 
-            fingers[i].transform.localPosition += fingersAccData[i] - wristAccData;
+            fingers[i].transform.localPosition = fingersAccData[i] - wristAccData;
         }
     }
 

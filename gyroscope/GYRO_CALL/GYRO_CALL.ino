@@ -85,12 +85,12 @@ void setup() {
   Serial.println(accelgyro.testConnection() ? "MPU6050 connection successful" : "MPU6050 connection failed");
   delay(1000);
   // reset offsets
-  accelgyro.setXAccelOffset(-4454);
-  accelgyro.setYAccelOffset(-1910);
-  accelgyro.setZAccelOffset(1520);
-  accelgyro.setXGyroOffset(73);
-  accelgyro.setYGyroOffset(64);
-  accelgyro.setZGyroOffset(-11);
+  accelgyro.setXAccelOffset(0);
+  accelgyro.setYAccelOffset(0);
+  accelgyro.setZAccelOffset(0);
+  accelgyro.setXGyroOffset(0);
+  accelgyro.setYGyroOffset(0);
+  accelgyro.setZGyroOffset(0);
 }
  
 ///////////////////////////////////   LOOP   ////////////////////////////////////
