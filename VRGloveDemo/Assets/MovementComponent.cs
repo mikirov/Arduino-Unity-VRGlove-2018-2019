@@ -54,6 +54,7 @@ public class MovementComponent : MonoBehaviour {
             Debug.LogError("Port Exception");
             return;
         }
+
         coordinateStrings = line.Split(' ');
         float[] coordinates = Array.ConvertAll(coordinateStrings, float.Parse);
 
@@ -79,7 +80,7 @@ public class MovementComponent : MonoBehaviour {
         //Quaternion rotation = new Quaternion()
         //transform.Rotate(coordinates[0], coordinates[1], coordinates[2]);
         // transform.Translate(coordinates[3], coordinates[4], coordinates[5]);
-        Vector3 wristAccData = Vector3.zero;
+        Vector3 wristAccData = new Vector3(x_pos, y_pos, z_pos);
         Vector3 gyroData = new Vector3(z, x, y);
         Vector3[] fingersAccData = { Vector3.zero, Vector3.zero, Vector3.zero, Vector3.zero, Vector3.zero };
         gloveController.FeedMovementInfo(wristAccData, gyroData, fingersAccData);

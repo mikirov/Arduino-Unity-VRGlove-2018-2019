@@ -27,7 +27,7 @@ public class GloveController : MonoBehaviour {
             }
 
 
-            fingers[i].transform.position = fingersAccData[i] - wristAccData;
+            fingers[i].transform.localPosition += fingersAccData[i] - wristAccData;
         }
     }
 
