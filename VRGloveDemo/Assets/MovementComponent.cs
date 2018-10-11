@@ -10,8 +10,12 @@ public class MovementComponent : MonoBehaviour {
 
     [SerializeField]
     string port = "COM3";
+
     [SerializeField]
     int multiplier = 10;
+
+    private GloveController gloveController;
+
    
     float x_rot = 0, y_rot = 0, z_rot = 0;
     float x_pos = 0, y_pos = 0, z_pos = 0;
@@ -20,9 +24,16 @@ public class MovementComponent : MonoBehaviour {
     string[] coordinateStrings = new string[3];
 
 
+
     void Start () {
+        gloveController = FindObjectOfType<GloveController>();
+        if(!gloveController)
+        {
+            Debug.LogError("No glove controller in scene!");
+        }
 
         serialPort = new SerialPort(port, 38400);
+        serialPort.ReadTimeout = 1000 / 60; // 60 times a frame
         if (!serialPort.IsOpen)
         {
             Debug.LogWarning("Opening port!");
@@ -57,11 +68,26 @@ public class MovementComponent : MonoBehaviour {
         {
             Debug.Log(e);
         }
+
+        line = serialPort.ReadLine();
+     
+        coordinateStrings = line.Split(' ');
+        float[] coordinates = Array.ConvertAll(coordinateStrings, float.Parse);
+
+        x = coordinates[0];
+        y = coordinates[1];
+        z = coordinates[2];
+        
+        transform.rotation = Quaternion.Euler(new Vector3(z, x, y));
+
         //Vector3 position = transform.position + new Vector3(coordinates[3], coordinates[4], coordinates[5]);
         //Quaternion rotation = new Quaternion()
         //transform.Rotate(coordinates[0], coordinates[1], coordinates[2]);
         // transform.Translate(coordinates[3], coordinates[4], coordinates[5]);
-
+        Vector3 wristAccData = Vector3.zero;
+        Vector3 gyroData = new Vector3(z, x, y);
+        Vector3[] fingersAccData = { Vector3.zero, Vector3.zero, Vector3.zero, Vector3.zero, Vector3.zero };
+        gloveController.FeedMovementInfo(wristAccData, gyroData, fingersAccData);
     }
     
 
