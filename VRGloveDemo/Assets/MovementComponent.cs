@@ -48,35 +48,30 @@ public class MovementComponent : MonoBehaviour {
         try
         {
             line = serialPort.ReadLine();
-
-            coordinateStrings = line.Split(' ');
-            float[] coordinates = Array.ConvertAll(coordinateStrings, float.Parse);
-
-            x_rot = coordinates[0];
-            y_rot = coordinates[1];
-            z_rot = coordinates[2];
-
-            transform.rotation = Quaternion.Euler(new Vector3(z_rot, x_rot, y_rot));
-
-            x_pos = coordinates[3] / sensitivity * multiplier;
-            y_pos = coordinates[4] / sensitivity * multiplier;
-            z_pos = coordinates[5] / sensitivity * multiplier;
-
-            transform.position = new Vector3(x_pos, y_pos, z_pos);
         }
         catch(System.Exception e)
         {
-            Debug.Log(e);
+            Debug.LogError("Port Exception");
+            return;
         }
-
-        line = serialPort.ReadLine();
-     
         coordinateStrings = line.Split(' ');
         float[] coordinates = Array.ConvertAll(coordinateStrings, float.Parse);
 
-        x = coordinates[0];
-        y = coordinates[1];
-        z = coordinates[2];
+        x_rot = coordinates[0];
+        y_rot = coordinates[1];
+        z_rot = coordinates[2];
+
+        transform.rotation = Quaternion.Euler(new Vector3(z_rot, x_rot, y_rot));
+
+        x_pos = coordinates[3] / sensitivity * multiplier;
+        y_pos = coordinates[4] / sensitivity * multiplier;
+        z_pos = coordinates[5] / sensitivity * multiplier;
+
+        transform.position = new Vector3(x_pos, y_pos, z_pos);
+
+        float x = coordinates[0];
+        float y = coordinates[1];
+        float z = coordinates[2];
         
         transform.rotation = Quaternion.Euler(new Vector3(z, x, y));
 
