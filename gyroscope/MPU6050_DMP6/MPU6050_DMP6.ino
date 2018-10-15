@@ -132,28 +132,29 @@ void loop() {
  
  
  
-        // display Euler angles in degrees
+        // display Quaternion
         mpu.dmpGetQuaternion(&q, fifoBuffer);
-        mpu.dmpGetGravity(&gravity, &q);
-        mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
+        //mpu.dmpGetGravity(&gravity, &q);
+        //mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
         //Serial.print("test\t");
-        Serial.print(ypr[0] * 180/M_PI);
+        Serial.print(q.x);
         Serial.print(" ");
-        Serial.print(ypr[1] * 180/M_PI);
+        Serial.print(q.y);
         Serial.print(" ");
-        Serial.print(ypr[2] * 180/M_PI);
+        Serial.print(q.z);
         Serial.print(" ");
-
-        mpu.dmpGetQuaternion(&q, fifoBuffer);
-        mpu.dmpGetAccel(&aa, fifoBuffer);
-        mpu.dmpGetGravity(&gravity, &q);
-        mpu.dmpGetLinearAccel(&aaReal, &aa, &gravity);
-        mpu.dmpGetLinearAccelInWorld(&aaWorld, &aaReal, &q);
-        Serial.print(aaWorld.x);
-        Serial.print(" ");
-        Serial.print(aaWorld.y);
-        Serial.print(" ");
-        Serial.println(aaWorld.z);
+        Serial.println(q.w);
+        
+        //mpu.dmpGetQuaternion(&q, fifoBuffer);
+        //mpu.dmpGetAccel(&aa, fifoBuffer);
+        //mpu.dmpGetGravity(&gravity, &q);
+        //mpu.dmpGetLinearAccel(&aaReal, &aa, &gravity);
+        //mpu.dmpGetLinearAccelInWorld(&aaWorld, &aaReal, &q);
+        //Serial.print(aaWorld.x);
+        //Serial.print(" ");
+        //Serial.print(aaWorld.y);
+        //Serial.print(" ");
+        //Serial.println(aaWorld.z);
     
 
     }

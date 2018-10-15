@@ -17,7 +17,7 @@ public class MovementComponent : MonoBehaviour {
     private GloveController gloveController;
 
    
-    float x_rot = 0, y_rot = 0, z_rot = 0;
+    float x_rot = 0, y_rot = 0, z_rot = 0, w_rot;
     float x_acc = 0, y_acc = 0, z_acc = 0;
 
     //float x_speed_old = 0, y_speed_old = 0, z_speed_old = 0;
@@ -95,23 +95,24 @@ public class MovementComponent : MonoBehaviour {
         x_rot = coordinates[0];
         y_rot = coordinates[1];
         z_rot = coordinates[2];
+        w_rot = coordinates[3];
 
-        transform.rotation = Quaternion.Euler(new Vector3(z_rot, x_rot, y_rot));
+        transform.rotation = new Quaternion(-x_rot, z_rot, y_rot, w_rot);
 
 
-        x_acc = coordinates[3] * multiplier; // / sensitivity ;
-        y_acc = coordinates[4] * multiplier; // / sensitivity ;
-        z_acc = coordinates[5] * multiplier; // / sensitivity;
-        Debug.Log("x_acc: " + x_acc + "y_acc: " + y_acc + "z_acc: " + z_acc);
-        x_speed = x_acc * Time.deltaTime;
-        y_speed = y_acc * Time.deltaTime;
-        z_speed = z_acc * Time.deltaTime;
-        Debug.Log("x_speed_new: " + x_speed + "y_speed_new: " + y_speed + "z_speed_new: " + z_speed);
-        x_pos += x_speed * Time.deltaTime;
-        y_pos += y_speed * Time.deltaTime;
-        z_pos += z_speed * Time.deltaTime;
-        Debug.Log("x_pos_new: " + z_pos + "y_pos_new" + y_pos + "z_pos_new" + z_pos);
-        transform.position = new Vector3(x_pos, z_pos, y_pos);
+        //x_acc = coordinates[3] * multiplier; // / sensitivity ;
+        //y_acc = coordinates[4] * multiplier; // / sensitivity ;
+        //z_acc = coordinates[5] * multiplier; // / sensitivity;
+        //debug.log("x_acc: " + x_acc + "y_acc: " + y_acc + "z_acc: " + z_acc);
+        //x_speed = x_acc * time.deltatime;
+        //y_speed = y_acc * time.deltatime;
+        //z_speed = z_acc * time.deltatime;
+        //debug.log("x_speed_new: " + x_speed + "y_speed_new: " + y_speed + "z_speed_new: " + z_speed);
+        //x_pos += x_speed * time.deltatime;
+        //y_pos += y_speed * time.deltatime;
+        //z_pos += z_speed * time.deltatime;
+        //debug.log("x_pos_new: " + z_pos + "y_pos_new" + y_pos + "z_pos_new" + z_pos);
+        //transform.position = new vector3(x_pos, z_pos, y_pos);
 
     }
     private void OnDisable()
