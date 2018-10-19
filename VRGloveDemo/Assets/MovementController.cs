@@ -4,7 +4,7 @@ using UnityEngine;
 using System.IO.Ports;
 using System;
 
-public class MovementComponent : MonoBehaviour {
+public class MovementController : MonoBehaviour {
 
     SerialPort serialPort;
 
@@ -97,7 +97,7 @@ public class MovementComponent : MonoBehaviour {
         z_rot = coordinates[2];
         w_rot = coordinates[3];
 
-        transform.rotation = new Quaternion(-x_rot, z_rot, y_rot, w_rot);
+        transform.rotation = new Quaternion(x_rot, -z_rot, y_rot, w_rot);
 
 
         //x_acc = coordinates[3] * multiplier; // / sensitivity ;
