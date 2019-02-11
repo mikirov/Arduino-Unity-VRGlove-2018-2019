@@ -56,6 +56,28 @@ ModelImporter:
     100100: //RootNode
     100102: Hand_Left
     100104: Hand_Right
+    100106: Armature
+    100108: Finger10
+    100110: Finger11
+    100112: Finger12
+    100114: Finger13
+    100116: Finger20
+    100118: Finger21
+    100120: Finger22
+    100122: Finger23
+    100124: Finger30
+    100126: Finger31
+    100128: Finger32
+    100130: Finger33
+    100132: Finger40
+    100134: Finger41
+    100136: Finger42
+    100138: Finger43
+    100140: Finger50
+    100142: Finger51
+    100144: Finger52
+    100146: Finger53
+    100148: RootBone
     400000: Bone
     400002: Bone_0
     400004: Bone_001
@@ -109,6 +131,28 @@ ModelImporter:
     400100: //RootNode
     400102: Hand_Left
     400104: Hand_Right
+    400106: Armature
+    400108: Finger10
+    400110: Finger11
+    400112: Finger12
+    400114: Finger13
+    400116: Finger20
+    400118: Finger21
+    400120: Finger22
+    400122: Finger23
+    400124: Finger30
+    400126: Finger31
+    400128: Finger32
+    400130: Finger33
+    400132: Finger40
+    400134: Finger41
+    400136: Finger42
+    400138: Finger43
+    400140: Finger50
+    400142: Finger51
+    400144: Finger52
+    400146: Finger53
+    400148: RootBone
     2100000: Hand__Hand_Text_jpg
     2100002: Gloves__Glove_Text_jpg
     2100004: Slaves__Slaves_Text_png
@@ -118,6 +162,7 @@ ModelImporter:
     9500000: //RootNode
     13700000: Hand_Left
     13700002: Hand_Right
+    2186277476908879412: ImportLogs
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -138,7 +183,7 @@ ModelImporter:
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
     importConstraints: 0
-    animationCompression: 1
+    animationCompression: 3
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
@@ -192,7 +237,7 @@ ModelImporter:
     rootMotionBoneName: 
     rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
-    hasExtraRoot: 0
+    hasExtraRoot: 1
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   animationType: 2
