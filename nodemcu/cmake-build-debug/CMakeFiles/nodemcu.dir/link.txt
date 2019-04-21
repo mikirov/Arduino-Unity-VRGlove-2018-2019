@@ -1,0 +1,1 @@
+/home/misho/.platformio/packages/toolchain-xtensa/bin/xtensa-lx106-elf-g++  -g  -rdynamic CMakeFiles/nodemcu.dir/Multiplexer.cpp.o CMakeFiles/nodemcu.dir/main.cpp.o  -o nodemcu 
