@@ -7,11 +7,11 @@
 Multiplexer multiplexer(INPUT_COUNT);
 int results[INPUT_COUNT];
 
-const char* ssid = "shimonchick";//put your wifi network name here
-const char* password = "12345678";//put your wifi password here
+const char* ssid = "Ihome_"; //put your wifi network name here
+const char* password = "7702073278"; //put your wifi password here
 
-IPAddress ip(192,168,43,158);
-IPAddress gateway(192,168,43,1);
+IPAddress ip(192,168,0,158);
+IPAddress gateway(192,168,0,1);
 IPAddress subnet(255,255,255,0);
 
 WiFiServer server(80);
