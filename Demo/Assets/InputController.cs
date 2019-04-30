@@ -15,7 +15,7 @@ public class InputController : MonoBehaviour
 
     [SerializeField] private HandController handController;
 
-    public bool StateClient;
+//    public bool StateClient;
 
     public void Begin()
     {
@@ -29,7 +29,7 @@ public class InputController : MonoBehaviour
             List<byte> buffer = new List<byte>();
 
 
-            StateClient = client.Connected;
+//            StateClient = client.Connected;
             //list of values read (0 - 1024 analog values)
             List<int> readings = new List<int>();
 
@@ -54,6 +54,7 @@ public class InputController : MonoBehaviour
 
                     handController.SetReadings(readings);
 
+                    Debug.Log(readings);
                     readings.Clear();
                     //Clear the buffer ready for another reading
                     buffer.Clear();

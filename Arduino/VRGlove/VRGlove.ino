@@ -2,16 +2,16 @@
 #include <WiFiClient.h>
 #include "Multiplexer.h"
 
-#define INPUT_COUNT 11
+#define INPUT_COUNT 4
 
 Multiplexer multiplexer(INPUT_COUNT);
 int results[INPUT_COUNT];
 
-const char* ssid = "velios1";//put your wifi network name here
-const char* password = "789123654";//put your wifi password here
+const char* ssid = "shimonchick";//put your wifi network name here
+const char* password = "12345678";//put your wifi password here
 
-IPAddress ip(192,168,1,6);
-IPAddress gateway(192,168,1,1);
+IPAddress ip(192,168,43,158);
+IPAddress gateway(192,168,43,1);
 IPAddress subnet(255,255,255,0);
 
 WiFiServer server(80);
@@ -19,6 +19,7 @@ WiFiClient client;
 
 
 void setup() {
+  multiplexer.setup();
   Serial.begin(9600);
   WiFi.begin(ssid, password);
   WiFi.config(ip, gateway, subnet);
@@ -43,6 +44,8 @@ void setup() {
 
 void loop() {
   client = server.available();
+//  Serial.print("IP Address: ");
+//  Serial.println(WiFi.localIP());
 
   if(client)
   {

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor.U2D;
@@ -10,7 +11,8 @@ public class HandController : MonoBehaviour
 //	private bool configured = false;
 
 
-    struct JointPosition
+    
+    [Serializable] struct JointPosition
     {
         public Transform position;
         public Dictionary<int, Quaternion> bentReading;
