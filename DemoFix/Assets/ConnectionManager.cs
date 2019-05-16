@@ -24,6 +24,6 @@ public class ConnectionManager : MonoBehaviour
         int port = int.Parse(portInputField.text);
         PlayerPrefs.SetInt("port", port);
         PlayerPrefs.SetString("IP", IP);
-        FindObjectOfType<InputController>().Connect(IP, port);
+        FindObjectOfType<InputController>().ConnectClient(IP, port);
     }
 }

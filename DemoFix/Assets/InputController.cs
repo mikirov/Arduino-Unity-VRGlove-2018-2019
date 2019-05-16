@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.IO;
 using System.Text;
 using System.Threading;
+using System.Linq;
 
 public class InputController : MonoBehaviour
 {
@@ -13,16 +14,20 @@ public class InputController : MonoBehaviour
     private Thread thread;
     private TcpClient client;
 
+    private StreamReader stream;
+    private List<byte> buffer = new List<byte>();
+
     private void Start()
     {
         handController = FindObjectOfType<HandController>();
     }
-    
+
+    /*
     public void Connect(String Ip, int Port)
     {
         thread = new Thread(() =>
         {
-            Debug.Log("Connect to network");
+            Debug.Log("Connect to network " + Ip + ":" + Port);
             client = new TcpClient();
             client.Connect(Ip, Port);
 
@@ -37,22 +42,30 @@ public class InputController : MonoBehaviour
 
             while (client.Connected)
             {
+
                 //Read the next byte
                 int read = stream.Read();
-
+                Debug.Log(read + " - " + (char) read);
 
                 if (read == 32) // ascii code for space
                 {
-                    var str = Encoding.ASCII.GetString(buffer.ToArray());
+                    try
+                    {
+                        var str = Encoding.ASCII.GetString(buffer.ToArray());
 
-                    var val = int.Parse(str);
-                    readings.Add(val);
+                        int val = int.Parse(str);
+                        readings.Add(val);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.Log("Misho e debil " + e);
+                    }
                 }
 
                 //We split readings with a carriage return, so check for it
                 if (read == 13) // carriage return code
                 {
-                    Debug.Log(readings);
+                    Debug.Log(readings.ToArray());
 
                     handController.SetReadings(readings);
 
@@ -65,14 +78,48 @@ public class InputController : MonoBehaviour
                     //if this was not the end of a reading, then just add this new byte to our buffer
                     buffer.Add((byte) read);
             }
+
+
+            if (client.Connected)
+            {
+                client.Close();
+            }
         });
 
         thread.Start();
     }
+    */
+
+
+    public void ConnectClient(String Ip, int Port)
+    {
+        Debug.Log("Connect to network " + Ip + ":" + Port);
+        client = new TcpClient();
+        client.Connect(Ip, Port);
+
+        stream = new StreamReader(client.GetStream());
+        StartCoroutine(Client());
+    }
+
+
+    private IEnumerator Client()
+    {
+        while (true)
+        {
+            if (!client.Connected)
+            {
+                Debug.Log("Disconnected");
+                break;
+            }
+            string valueString = stream.ReadLine();
+            int[] values = valueString.Split(' ').Select(value => int.Parse(value)).ToArray();
+            handController.SetReadings(values);
+            yield return new WaitForEndOfFrame();
+        }
+    }
 
     private void OnDestroy()
     {
-        thread.Abort();
         if (client.Connected)
         {
             client.Close();

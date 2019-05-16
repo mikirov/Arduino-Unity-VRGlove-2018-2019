@@ -21,11 +21,17 @@ public class HandController : MonoBehaviour
         }
     }
 
-    public void SetReadings(List<int> values)
+    public void SetReadings(int[] values)
     {
-        for(int i = 0; i < values.Count; i++)
+        for (int i = 0; i < values.Length; i++)
         {
             fingerJoints[i].SetRotation(values[i]);
         }
+    }
+
+
+    public void SetReadings(List<int> values)
+    {
+        SetReadings(values.ToArray());
     }
 }

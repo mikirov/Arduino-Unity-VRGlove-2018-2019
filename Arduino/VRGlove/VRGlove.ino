@@ -7,11 +7,11 @@
 Multiplexer multiplexer(INPUT_COUNT);
 int results[INPUT_COUNT];
 
-const char* ssid = "Ihome_"; //put your wifi network name here
-const char* password = "7702073278"; //put your wifi password here
+const char* ssid = "MadaMada"; //put your wifi network name here
+const char* password = "12345678"; //put your wifi password here
 
-IPAddress ip(192,168,0,158);
-IPAddress gateway(192,168,0,1);
+IPAddress ip(192,168,43,69);
+IPAddress gateway(192,168,43,1);
 IPAddress subnet(255,255,255,0);
 
 WiFiServer server(80);
@@ -22,7 +22,7 @@ void setup() {
   multiplexer.setup();
   Serial.begin(9600);
   WiFi.begin(ssid, password);
-  WiFi.config(ip, gateway, subnet);
+  // WiFi.config(ip, gateway, subnet);
   Serial.println("Connecting");
 
   while(WiFi.status() != WL_CONNECTED)
@@ -44,8 +44,8 @@ void setup() {
 
 void loop() {
   client = server.available();
-//  Serial.print("IP Address: ");
-//  Serial.println(WiFi.localIP());
+  Serial.print("IP Address: ");
+  Serial.println(WiFi.localIP());
 
   if(client)
   {
@@ -53,14 +53,16 @@ void loop() {
     while(client.connected())
     {
       multiplexer.readAllInputs(results);
-      for(int i = 0; i < INPUT_COUNT; i++){
+      for(int i = 0; i < INPUT_COUNT -1; i++){
         Serial.printf("input: %d value: %d\n", i + 1, results[i]);
         client.print(results[i]);
         client.print(' ');
-      
+     
       }
+       client.print(results[INPUT_COUNT -1]);
+       
 
-        client.print('\r');
+       client.print('\r');
       
     
       //Delay before the next reading
