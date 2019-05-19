@@ -18,6 +18,7 @@ public class ConnectionManager : MonoBehaviour
         portInputField.text = "" + PlayerPrefs.GetInt("port", 80);
     }
 
+
     public void Connect()
     {
         string IP = ipInputField.text;

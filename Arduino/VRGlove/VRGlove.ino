@@ -10,7 +10,7 @@ int results[INPUT_COUNT];
 const char* ssid = "MadaMada"; //put your wifi network name here
 const char* password = "12345678"; //put your wifi password here
 
-IPAddress ip(192,168,43,69);
+IPAddress ip(192,168,43,69);    
 IPAddress gateway(192,168,43,1);
 IPAddress subnet(255,255,255,0);
 
