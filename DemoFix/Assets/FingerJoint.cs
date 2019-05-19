@@ -13,10 +13,19 @@ public class FingerJoint : MonoBehaviour
     private int minTrimmerValue;
     private int maxTrimmerValue;
 
+    private void Awake()
+    {
+        minTrimmerValue = PlayerPrefs.GetInt(name + "-min", 0);
+        maxTrimmerValue = PlayerPrefs.GetInt(name + "-max", 1024);
+    }
+
     public void SetBounds(int min, int max)
     {
         minTrimmerValue = min;
         maxTrimmerValue = max;
+        
+        PlayerPrefs.SetInt(name + "-min", min);
+        PlayerPrefs.SetInt(name + "-max", max);
     }
 
     public void SetRotation(float trimmerValue)
