@@ -6,10 +6,10 @@
 #define NODEMCU_MULTIPLEXER_H
 
 
-#define S0 0
-#define S1 4
-#define S2 5
-#define S3 16
+#define S0 12
+#define S1 14
+#define S2 2
+#define S3 0
 #define SIG 17
 
 

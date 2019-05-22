@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InputSimulator : MonoBehaviour {
+public class InputSimulator : BaseInputController {
 
     [SerializeField]
     [Range(0, 1024)]
@@ -10,6 +10,14 @@ public class InputSimulator : MonoBehaviour {
 
     [SerializeField]
     private List<FingerJoint> fingerJoints;
+
+    [SerializeField]
+    [Range(0, 512)]
+    private int minBound = 0;
+
+    [SerializeField]
+    [Range(512, 1024)]
+    private int maxBound = 1024;
 
     private void Awake()
     {
@@ -22,19 +30,23 @@ public class InputSimulator : MonoBehaviour {
 
     private void Start()
     {
+        /*
         foreach(FingerJoint joint in fingerJoints)
         {
-            joint.SetBounds(512, 800);
+            joint.SetBounds(minBound, maxBound);
         }
+        */
     }
 
-    private void Update()
+
+    public override List<int> GetValues()
     {
-        
-        for(int i = 0; i < 14; i++)
-        {
-            FingerJoint joint = fingerJoints[i];
-            joint.SetRotation(trimmerInputs[i]);
-        }
+        return trimmerInputs;
+    }
+
+
+    public override Quaternion GetMPUValues()
+    {
+        throw new System.NotImplementedException();
     }
 }

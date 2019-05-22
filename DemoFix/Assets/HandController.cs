@@ -13,12 +13,10 @@ public class HandController : MonoBehaviour
 
     private bool configured = false;
 
-    private void Start()
+    private void Update()
     {
-        foreach(FingerJoint joint in fingerJoints)
-        {
-            joint.SetBounds(0, 1024);
-        }
+        SetReadings(FindObjectOfType<BaseInputController>().GetValues());
+        transform.rotation = FindObjectOfType<BaseInputController>().GetMPUValues();
     }
 
     public void SetReadings(int[] values)
@@ -33,5 +31,14 @@ public class HandController : MonoBehaviour
     public void SetReadings(List<int> values)
     {
         SetReadings(values.ToArray());
+    }
+
+
+    public void SetBounds(int[] lowerValues, int[] highValues)
+    {
+        for(int i = 0; i < Math.Min(lowerValues.Length, highValues.Length); i++)
+        {
+            fingerJoints[i].SetBounds(lowerValues[i], highValues[i]);
+        }
     }
 }
