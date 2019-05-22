@@ -31,11 +31,11 @@ VectorFloat gravity;    // [x, y, z]            gravity vector
 
 
 
-const char* ssid = "velios1"; //put your wifi network name here
-const char* password = "789123654"; //put your wifi password here
+const char* ssid = "MadaMada"; //put your wifi network name here
+const char* password = "12345678"; //put your wifi password here
 
-IPAddress ip(192, 168, 1, 143);
-IPAddress gateway(192, 168, 1, 1);
+IPAddress ip(192, 168, 43, 69);
+IPAddress gateway(192, 168, 43, 1);
 IPAddress subnet(255, 255, 255, 0);
 
 WiFiServer server(80);

@@ -44,4 +44,9 @@ public class InputSimulator : BaseInputController {
         return trimmerInputs;
     }
 
+
+    public override Quaternion GetMPUValues()
+    {
+        throw new System.NotImplementedException();
+    }
 }

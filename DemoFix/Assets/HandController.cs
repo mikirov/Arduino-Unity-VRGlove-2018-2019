@@ -16,6 +16,7 @@ public class HandController : MonoBehaviour
     private void Update()
     {
         SetReadings(FindObjectOfType<BaseInputController>().GetValues());
+        transform.rotation = FindObjectOfType<BaseInputController>().GetMPUValues();
     }
 
     public void SetReadings(int[] values)
