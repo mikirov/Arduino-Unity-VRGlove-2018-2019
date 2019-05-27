@@ -13,24 +13,20 @@ public class HandController : MonoBehaviour
 
     private bool configured = false;
 
+    private Quaternion mpuCalibration = Quaternion.identity;
+
     private void Update()
     {
         SetReadings(FindObjectOfType<BaseInputController>().GetValues());
-        transform.rotation = FindObjectOfType<BaseInputController>().GetMPUValues();
-    }
+        Quaternion mpuRotation = FindObjectOfType<BaseInputController>().GetMPUValues();
 
-    public void SetReadings(int[] values)
-    {
-        for (int i = 0; i < values.Length; i++)
-        {
-            fingerJoints[i].SetRotation(values[i]);
-        }
+        transform.rotation = mpuRotation * Quaternion.Inverse(mpuCalibration);
     }
 
 
-    public void SetReadings(List<int> values)
+    public void SetCalibrationRotation(Quaternion calibrationQuat)
     {
-        SetReadings(values.ToArray());
+        mpuCalibration = calibrationQuat;
     }
 
 
@@ -40,5 +36,20 @@ public class HandController : MonoBehaviour
         {
             fingerJoints[i].SetBounds(lowerValues[i], highValues[i]);
         }
+    }
+
+
+    private void SetReadings(int[] values)
+    {
+        for (int i = 0; i < values.Length; i++)
+        {
+            fingerJoints[i].SetRotation(values[i]);
+        }
+    }
+
+
+    private void SetReadings(List<int> values)
+    {
+        SetReadings(values.ToArray());
     }
 }

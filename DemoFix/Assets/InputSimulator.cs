@@ -12,6 +12,9 @@ public class InputSimulator : BaseInputController {
     private List<FingerJoint> fingerJoints;
 
     [SerializeField]
+    private Vector3 rotation;
+
+    [SerializeField]
     [Range(0, 512)]
     private int minBound = 0;
 
@@ -47,6 +50,6 @@ public class InputSimulator : BaseInputController {
 
     public override Quaternion GetMPUValues()
     {
-        throw new System.NotImplementedException();
+        return Quaternion.Euler(rotation);
     }
 }
