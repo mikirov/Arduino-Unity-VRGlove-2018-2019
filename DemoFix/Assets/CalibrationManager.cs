@@ -70,6 +70,7 @@ public class CalibrationManager : MonoBehaviour
 
             yield return WaitUntilResting();
 
+            CalibrateRotation();
             lowerBounds = new List<int>(lastTrimmerValues);
 
             openHandPanel.SetActive(false);
@@ -81,19 +82,7 @@ public class CalibrationManager : MonoBehaviour
 
             closedHandPanel.SetActive(false);
 
-
-            bool hasFinishedCalibration = true;
-            for(int i = 0; i < highBounds.Count; i++)
-            {
-                if(highBounds[i] <= lowerBounds[i])
-                {
-                    Debug.LogError("Min val is higher than or equal to max. Restarting calibration!");
-                    hasFinishedCalibration = false;
-                    break;
-                }
-            }
-
-            if (hasFinishedCalibration)
+            if (Application.isEditor)
             {
                 handController.enabled = true;
                 handController.SetBounds(lowerBounds.ToArray(), highBounds.ToArray());
@@ -101,7 +90,37 @@ public class CalibrationManager : MonoBehaviour
                 Hide();
                 break;
             }
+            else
+            {
+                bool hasFinishedCalibration = true;
+                for (int i = 0; i < highBounds.Count; i++)
+                {
+                    if (highBounds[i] <= lowerBounds[i])
+                    {
+                        Debug.LogError("Min val is higher than or equal to max. Restarting calibration!");
+                        hasFinishedCalibration = false;
+                        break;
+                    }
+                }
+
+                if (hasFinishedCalibration)
+                {
+                    handController.enabled = true;
+                    handController.SetBounds(lowerBounds.ToArray(), highBounds.ToArray());
+
+                    Hide();
+                    break;
+                }
+            }
         }
+    }
+
+
+    private void CalibrateRotation()
+    {
+        Quaternion mpuQuaternion = FindObjectOfType<BaseInputController>().GetMPUValues();
+        Quaternion forward = Quaternion.LookRotation(Vector3.forward);
+        handController.SetCalibrationRotation(Quaternion.Inverse(forward) * mpuQuaternion);
     }
 
 
