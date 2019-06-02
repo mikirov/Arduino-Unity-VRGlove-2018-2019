@@ -12,7 +12,7 @@ public class InputSimulator : BaseInputController {
     private List<FingerJoint> fingerJoints;
 
     [SerializeField]
-    private Vector3 rotation;
+    private Quaternion rotation;
 
     [SerializeField]
     [Range(0, 512)]
@@ -22,23 +22,14 @@ public class InputSimulator : BaseInputController {
     [Range(512, 1024)]
     private int maxBound = 1024;
 
-    private void Awake()
-    {
-        if (fingerJoints.Count != 14)
-        {
-            Debug.LogError("14 finger joints needed!");
-            Destroy(gameObject);
-        }
-    }
-
     private void Start()
     {
-        /*
-        foreach(FingerJoint joint in fingerJoints)
+        int fingerJointCount = FindObjectOfType<HandController>().GetFingerJointCount();
+        if (fingerJoints.Count < fingerJointCount)
         {
-            joint.SetBounds(minBound, maxBound);
+            Debug.LogError(fingerJointCount + " finger joints needed!");
+            Destroy(gameObject);
         }
-        */
     }
 
 
@@ -50,6 +41,6 @@ public class InputSimulator : BaseInputController {
 
     public override Quaternion GetMPUValues()
     {
-        return Quaternion.Euler(rotation);
+        return rotation;
     }
 }

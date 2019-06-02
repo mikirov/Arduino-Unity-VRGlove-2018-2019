@@ -14,14 +14,18 @@ public class InputController : BaseInputController
     private TcpClient client;
 
     private StreamReader stream;
-    private List<int> trimmerValues = new List<int>();
+    private int[] trimmerValues;
     private Quaternion mpuQuaternion = Quaternion.identity;
 
     [SerializeField]
     private int trimmerCount = 2;
 
+    [SerializeField]
+    private float quaternionValueErrorDetectionLimit = 0.1f;
+
     private void Start()
     {
+        trimmerValues = new int[trimmerCount];
         handController = FindObjectOfType<HandController>();
     }
 
@@ -69,30 +73,69 @@ public class InputController : BaseInputController
 
             if (trimmerValues.Count != trimmerCount)
             {
-                Debug.LogError("Wrong number of trimmer values read");
+                Debug.LogError("Wrong number of trimmer values read " + trimmerValues.Count);
             }
             else
             {
-                this.trimmerValues = trimmerValues;
+                string vals = "";
+                foreach(float f in trimmerValues)
+                {
+                    vals += f.ToString() + " ";
+                }
+                Debug.Log(vals);
+
+                this.trimmerValues = trimmerValues.ToArray();
             }
             
-            if(quaternionValues.Count == 4)
+            
+            if(mpuQuaternion == Quaternion.identity || quaternionValuesAreCorrect(quaternionValues))
             {
                 mpuQuaternion = new Quaternion(
-                    quaternionValues[0],
-                    quaternionValues[1],
-                    quaternionValues[2],
-                    quaternionValues[3]
+                    -quaternionValues[1],
+                    -quaternionValues[3],
+                    -quaternionValues[2],
+                    quaternionValues[0]
                 );
             }
             else
             {
-                Debug.LogWarning("MPU Values invalid this frame: ");
+                Debug.LogError("MPU Values invalid this frame!");
             }
             
             stream.DiscardBufferedData();
             yield return new WaitForEndOfFrame();
         }
+    }
+
+    private bool quaternionValuesAreCorrect(List<float> quaternionValues)
+    {
+        if(quaternionValues.Count != 4)
+        {
+            return false;
+        }
+
+        List<float> lastQuaternionValues = new List<float>
+            { mpuQuaternion.w, mpuQuaternion.x, mpuQuaternion.z, mpuQuaternion.y};
+
+
+        for(int i = 0; i < quaternionValues.Count; i++)
+        {
+            float quatDifference = Mathf.Abs(lastQuaternionValues[i]) - Mathf.Abs(quaternionValues[i]);
+            if ( Mathf.Abs(quaternionValues[i]) <= float.Epsilon || 
+                !quaternionValueIsInAcceptableRange(quaternionValues[i]) ||
+                quatDifference > quaternionValueErrorDetectionLimit)
+            {
+                Debug.Log("Quat difference: " + quatDifference);
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private bool quaternionValueIsInAcceptableRange(float val)
+    {
+        return val < 1 && val > -1;
     }
 
     private void OnDestroy()
@@ -105,7 +148,7 @@ public class InputController : BaseInputController
 
     public override List<int> GetValues()
     {
-        return trimmerValues;
+        return trimmerValues.ToList();
     }
 
     public override Quaternion GetMPUValues()

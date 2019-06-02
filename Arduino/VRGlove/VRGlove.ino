@@ -7,7 +7,7 @@
 #include "MPU6050_6Axis_MotionApps20.h"
 #include "Wire.h"
 
-#define INPUT_COUNT 2
+#define INPUT_COUNT 9
 
 #define DEBUG 1 // set to 0 to disable debug mode
 #define INTERRUPT_PIN 15 // use pin 15 on ESP8266
@@ -32,11 +32,11 @@ VectorFloat gravity;    // [x, y, z]            gravity vector
 
 
 
-const char* ssid = "velios1"; //put your wifi network name here
-const char* password = "789123654"; //put your wifi password here
+const char* ssid = "MadaMada"; //put your wifi network name here
+const char* password = "12345678"; //put your wifi password here
 
-IPAddress ip(192, 168, 1, 143);
-IPAddress gateway(192, 168, 1, 1);
+IPAddress ip(192, 168, 43, 143);
+IPAddress gateway(192, 168, 43, 1);
 IPAddress subnet(255, 255, 255, 0);
 
 WiFiServer server(80);
@@ -173,9 +173,6 @@ void mpu_loop()
     multiplexer.readAllInputs(results);
 
     #ifdef DEBUG
-    for(int i = 0; i < INPUT_COUNT; i++){
-      Serial.printf("input: %d value: %d\n", i + 1, results[i]);
-    }
     Serial.print("quat\t");
     Serial.print(q.w);
     Serial.print("\t");
@@ -193,8 +190,9 @@ void mux_loop(){
     multiplexer.readAllInputs(results);
     #ifdef DEBUG
     for(int i = 0; i < INPUT_COUNT; i++){
-      Serial.printf("input: %d value: %d\n", i + 1, results[i]);
+      Serial.printf("%d ", results[i]);
     }
+    Serial.print("\n");
     #endif
 }
 

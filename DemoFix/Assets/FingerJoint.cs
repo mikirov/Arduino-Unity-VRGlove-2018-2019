@@ -10,6 +10,9 @@ public class FingerJoint : MonoBehaviour
     [SerializeField]
     private Vector3 maxRotation;
 
+    [SerializeField]
+    private bool hasPositiveRotation = true;
+
     private int minTrimmerValue;
     private int maxTrimmerValue;
 
@@ -21,6 +24,11 @@ public class FingerJoint : MonoBehaviour
 
     public void SetBounds(int min, int max)
     {
+        if(min > max)
+        {
+            Debug.LogError("Finger joint " + name + " has bounds set out of range!", gameObject);
+            return;
+        }
         minTrimmerValue = min;
         maxTrimmerValue = max;
         
@@ -32,17 +40,42 @@ public class FingerJoint : MonoBehaviour
     {
         Vector3 rotation = transform.rotation.eulerAngles;
         float lerpVal = 0;
-        if (trimmerValue >= minTrimmerValue)
+        if(trimmerValue >= minTrimmerValue)
         {
             lerpVal = (trimmerValue - minTrimmerValue) / (maxTrimmerValue - minTrimmerValue);
         }
 
-        rotation = Vector3.Lerp(
-            minRotation,
-            maxRotation,
-            lerpVal
-        );
+
+        if(float.IsInfinity(lerpVal) || float.IsNaN(lerpVal))
+        {
+            Debug.LogError(
+                lerpVal + " for " + name + 
+                " with min " + minTrimmerValue + " and max: " + minTrimmerValue + 
+                " is infinity!");
+            return;
+        }
+
+        if (hasPositiveRotation) {
+            rotation = Vector3.Lerp(
+                minRotation,
+                maxRotation,
+                lerpVal
+            );
+        }
+        else
+        {
+            rotation = Vector3.Lerp(
+                maxRotation,
+                minRotation,
+                lerpVal
+            );
+        }
 
         transform.localEulerAngles = rotation;
+    }
+
+    public bool HasPositiveRotation()
+    {
+        return hasPositiveRotation;
     }
 }

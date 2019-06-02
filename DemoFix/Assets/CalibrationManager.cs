@@ -22,13 +22,17 @@ public class CalibrationManager : MonoBehaviour
     [SerializeField]
     private float acceptableRestingTrimmerValueRange = 10;
 
+    [SerializeField]
+    private bool hasErrorChecking = true;
+
     private BaseInputController inputController;
     private HandController handController;
 
     private List<int> lastTrimmerValues;
 
-    private List<int> lowerBounds;
-    private List<int> highBounds;
+    private int[] lowerBounds;
+    private int[] highBounds;
+    private int fingerJointCount;
 
     private float timer;
 
@@ -44,8 +48,14 @@ public class CalibrationManager : MonoBehaviour
         inputController = FindObjectOfType<BaseInputController>();
         handController = FindObjectOfType<HandController>();
 
+        fingerJointCount = handController.GetFingerJointCount();
+
+        lowerBounds = new int[fingerJointCount];
+        highBounds = new int[fingerJointCount];
+
         openHandPanel.SetActive(false);
         closedHandPanel.SetActive(false);
+
         Hide();
     }
     
@@ -70,30 +80,49 @@ public class CalibrationManager : MonoBehaviour
 
             yield return WaitUntilResting();
 
-            CalibrateRotation();
-            lowerBounds = new List<int>(lastTrimmerValues);
+            for (int i = 0; i < fingerJointCount; i++)
+            {
+                if (handController.GetFingerAt(i).HasPositiveRotation())
+                {
+                    lowerBounds[i] = lastTrimmerValues[i];
+                }
+                else
+                {
+                    highBounds[i] = lastTrimmerValues[i];
+                }
+            }
 
             openHandPanel.SetActive(false);
             closedHandPanel.SetActive(true);
 
             yield return WaitUntilResting();
 
-            highBounds = new List<int>(lastTrimmerValues);
+            for (int i = 0; i < fingerJointCount; i++)
+            {
+                if (handController.GetFingerAt(i).HasPositiveRotation())
+                {
+                    highBounds[i] = lastTrimmerValues[i];
+                }
+                else
+                {
+                    lowerBounds[i] = lastTrimmerValues[i];
+                }
+            }
 
             closedHandPanel.SetActive(false);
 
             if (Application.isEditor)
             {
                 handController.enabled = true;
-                handController.SetBounds(lowerBounds.ToArray(), highBounds.ToArray());
+                handController.SetBounds(lowerBounds, highBounds);
 
                 Hide();
                 break;
             }
-            else
+            else if(hasErrorChecking)
             {
                 bool hasFinishedCalibration = true;
-                for (int i = 0; i < highBounds.Count; i++)
+                for (int i = 0; i < lastTrimmerValues.Count; i++)
                 {
                     if (highBounds[i] <= lowerBounds[i])
                     {
@@ -106,13 +135,15 @@ public class CalibrationManager : MonoBehaviour
                 if (hasFinishedCalibration)
                 {
                     handController.enabled = true;
-                    handController.SetBounds(lowerBounds.ToArray(), highBounds.ToArray());
+                    handController.SetBounds(lowerBounds, highBounds);
 
                     Hide();
                     break;
                 }
             }
         }
+
+        CalibrateRotation();
     }
 
 
