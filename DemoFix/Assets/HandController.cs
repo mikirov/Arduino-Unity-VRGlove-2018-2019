@@ -10,9 +10,7 @@ public class HandController : MonoBehaviour
 {
     [SerializeField]
     private List<FingerJoint> fingerJoints;
-
-    private bool configured = false;
-
+    
     private Quaternion mpuCalibration;
 
     private void Awake()

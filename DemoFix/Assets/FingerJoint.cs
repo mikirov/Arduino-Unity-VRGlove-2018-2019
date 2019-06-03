@@ -48,27 +48,18 @@ public class FingerJoint : MonoBehaviour
 
         if(float.IsInfinity(lerpVal) || float.IsNaN(lerpVal))
         {
-            Debug.LogError(
-                lerpVal + " for " + name + 
+            Debug.LogError(lerpVal + " for " + name + 
                 " with min " + minTrimmerValue + " and max: " + minTrimmerValue + 
                 " is infinity!");
             return;
         }
 
         if (hasPositiveRotation) {
-            rotation = Vector3.Lerp(
-                minRotation,
-                maxRotation,
-                lerpVal
-            );
+            rotation = Vector3.Lerp(minRotation, maxRotation, lerpVal);
         }
         else
         {
-            rotation = Vector3.Lerp(
-                maxRotation,
-                minRotation,
-                lerpVal
-            );
+            rotation = Vector3.Lerp(maxRotation, minRotation, lerpVal);
         }
 
         transform.localEulerAngles = rotation;

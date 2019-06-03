@@ -111,15 +111,7 @@ public class CalibrationManager : MonoBehaviour
 
             closedHandPanel.SetActive(false);
 
-            if (Application.isEditor)
-            {
-                handController.enabled = true;
-                handController.SetBounds(lowerBounds, highBounds);
-
-                Hide();
-                break;
-            }
-            else if(hasErrorChecking)
+            if(hasErrorChecking)
             {
                 bool hasFinishedCalibration = true;
                 for (int i = 0; i < lastTrimmerValues.Count; i++)
