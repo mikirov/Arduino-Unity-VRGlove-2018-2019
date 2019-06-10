@@ -39,11 +39,11 @@ int16_t ax, ay, az,gx, gy, gz;
 int mean_ax,mean_ay,mean_az,mean_gx,mean_gy,mean_gz,state=0;
 int ax_offset,ay_offset,az_offset,gx_offset,gy_offset,gz_offset;
 
-const char* ssid = "velios1"; //put your wifi network name here
-const char* password = "789123654"; //put your wifi password here
+const char* ssid = "MadaMada"; //put your wifi network name here
+const char* password = "12345678"; //put your wifi password here
 
-IPAddress ip(192, 168, 1, 143);
-IPAddress gateway(192, 168, 1, 1);
+IPAddress ip(192, 168, 43, 143);
+IPAddress gateway(192, 168, 43, 1);
 IPAddress subnet(255, 255, 255, 0);
 
 WiFiServer server(80);
@@ -179,60 +179,9 @@ void mpu_setup()
     #endif
   }
 
-  mpu.setXAccelOffset(0);
-  mpu.setYAccelOffset(0);
-  mpu.setZAccelOffset(0);
-  mpu.setXGyroOffset(0);
-  mpu.setYGyroOffset(0);
-  mpu.setZGyroOffset(0);
-
-
-  Serial.println("\nReading sensors for first time...");
-  meansensors();
-  
-  delay(1000);
-  Serial.println("\nCalculating offsets...");
-  calibration();
-  delay(1000);
-  
-  meansensors();
-  Serial.println("\nFINISHED!");
-  Serial.print("\nSensor readings with offsets:\t");
-  Serial.print(mean_ax); 
-  Serial.print("\t");
-  Serial.print(mean_ay); 
-  Serial.print("\t");
-  Serial.print(mean_az); 
-  Serial.print("\t");
-  Serial.print(mean_gx); 
-  Serial.print("\t");
-  Serial.print(mean_gy); 
-  Serial.print("\t");
-  Serial.println(mean_gz);
-  Serial.print("Your offsets:\t");
-  Serial.print(ax_offset); 
-  Serial.print("\t");
-  Serial.print(ay_offset); 
-  Serial.print("\t");
-  Serial.print(az_offset); 
-  Serial.print("\t");
-  Serial.print(gx_offset); 
-  Serial.print("\t");
-  Serial.print(gy_offset); 
-  Serial.print("\t");
-  Serial.println(gz_offset); 
-  Serial.println("\nData is printed as: acelX acelY acelZ giroX giroY giroZ");
-  Serial.println("Check that your sensor readings are close to 0 0 16384 0 0 0");
-  Serial.println("If calibration was succesful write down your offsets so you can set them in your projects using something similar to mpu.setXAccelOffset(youroffset)");
-
-  mpu.setXAccelOffset(ax_offset);
-  mpu.setYAccelOffset(ay_offset);
-  mpu.setZAccelOffset(az_offset);
-  mpu.setXGyroOffset(gx_offset);
-  mpu.setYGyroOffset(gy_offset);
-  mpu.setZGyroOffset(gz_offset);
-
- 
+  mpu.setXGyroOffset(315);
+  mpu.setYGyroOffset(-114);
+  mpu.setZGyroOffset(17);
 }
 
 
