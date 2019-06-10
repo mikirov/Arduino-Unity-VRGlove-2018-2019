@@ -126,14 +126,19 @@ public class CalibrationManager : MonoBehaviour
 
                 if (hasFinishedCalibration)
                 {
-                    handController.enabled = true;
-                    handController.SetBounds(lowerBounds, highBounds);
-
-                    Hide();
                     break;
                 }
             }
+            else
+            {
+                break;
+            }
         }
+
+        handController.enabled = true;
+        handController.SetBounds(lowerBounds, highBounds);
+
+        Hide();
 
         CalibrateRotation();
     }
