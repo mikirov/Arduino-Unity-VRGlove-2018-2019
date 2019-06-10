@@ -27,7 +27,7 @@ public class HandController : MonoBehaviour
     {
         SetReadings(FindObjectOfType<BaseInputController>().GetValues());
         Quaternion mpuRotation = FindObjectOfType<BaseInputController>().GetMPUValues();
-
+        
         transform.rotation = mpuRotation * Quaternion.Inverse(mpuCalibration);
     }
 

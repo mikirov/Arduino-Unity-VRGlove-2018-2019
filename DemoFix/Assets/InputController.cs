@@ -23,6 +23,12 @@ public class InputController : BaseInputController
     [SerializeField]
     private float quaternionValueErrorDetectionLimit = 0.1f;
 
+    [SerializeField]
+    private float timeForForceRotationUpdate = 2;
+
+
+    private float timeSinceLastUpdate = 0;
+
     private void Start()
     {
         trimmerValues = new int[trimmerCount];
@@ -88,7 +94,9 @@ public class InputController : BaseInputController
             }
             
             
-            if(mpuQuaternion == Quaternion.identity || quaternionValuesAreCorrect(quaternionValues))
+            if(mpuQuaternion == Quaternion.identity || 
+                timeSinceLastUpdate >= timeForForceRotationUpdate || 
+                quaternionValuesAreCorrect(quaternionValues))
             {
                 mpuQuaternion = new Quaternion(
                     -quaternionValues[1],
@@ -96,12 +104,15 @@ public class InputController : BaseInputController
                     -quaternionValues[2],
                     quaternionValues[0]
                 );
+                timeSinceLastUpdate = 0;
             }
             else
             {
                 Debug.LogError("MPU Values invalid this frame!");
             }
-            
+
+
+            timeSinceLastUpdate += Time.deltaTime;
             stream.DiscardBufferedData();
             yield return new WaitForEndOfFrame();
         }

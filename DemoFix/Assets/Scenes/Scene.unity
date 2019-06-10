@@ -296,7 +296,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &180990698
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -311,6 +311,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trimmerCount: 9
   quaternionValueErrorDetectionLimit: 0.2
+  timeForForceRotationUpdate: 0.5
 --- !u!4 &180990699
 Transform:
   m_ObjectHideFlags: 0
@@ -1001,7 +1002,7 @@ MonoBehaviour:
   closedHandPanel: {fileID: 379716732}
   maxTimer: 5
   acceptableRestingTrimmerValueRange: 10
-  hasErrorChecking: 1
+  hasErrorChecking: 0
 --- !u!1 &978823399
 GameObject:
   m_ObjectHideFlags: 0
@@ -2032,7 +2033,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1191694713
 MonoBehaviour:
   m_ObjectHideFlags: 0
